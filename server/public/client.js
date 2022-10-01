@@ -1,9 +1,13 @@
-//const {response} = require('express');
+
+
+//const { response } = require("express");
 
 $(document).ready(onReady);
 
 
 let numbers = [];
+let operator = '';
+let history = [];
 
 
 function onReady(){
@@ -13,47 +17,47 @@ function onReady(){
     $('#minus').on('click', minusButton);
     $('#multiply').on('click', multiplyButton);
     $('#divide').on('click', divideButton);
-    $('#equals').on('submit', equalsButton);
+    $('#calculator').on('submit', equalsButton);
     $('#clear').on('click', clearButton);
 };
 
 function addButton(){
-    let operator = '+';
+    operator = '+';
     console.log('in addButton', operator);
     return operator;
 };
 
 function minusButton(){
-    let operator = '-';
+    operator = '-';
     console.log('in minusButton', operator);
     return operator;
 };
 
 function multiplyButton(){
-    let operator = '*';
+    operator = '*';
     console.log('in multiplyButton', operator);
     return operator;
 };
 
 function divideButton(){
-    let operator = '/';
+    operator = '/';
     console.log('in divideButton', operator);
     return operator;
 };
 
 function pickOperator(){
-    addButton;
-    minusButton;
-    multiplyButton;
-    divideButton;
     if(operator === '+'){
         console.log('operator +', operator);
+        return '+';
     }else if(operator === '-'){
         console.log('operator -', operator);
+        return '-';
     }else if(operator === '*'){
         console.log('operator *', operator);
+        return '*';
     }else if(operator === '/'){
         console.log('operator /', operator);
+        return '/';
     }
 }
 
@@ -62,7 +66,7 @@ function equalsButton(evt){
 
     console.log('in equalsButton');
 
-    let opp = operator;
+    let opp = pickOperator();
 
     let newNumbers = {
         numberOne: $('#firstNum').val(),
@@ -103,15 +107,32 @@ function loadCalc(){
     .then((response) => {
         console.log('GET/calculator', response);
         numbers = response;
+        history.push(numbers);
 
         render();
     })
 }
-
+let i = 0;
 function render(){
     console.log('in render', numbers);
 
+    $('#result').empty();
+    $('#result').append(`Answer: ${numbers.answer}`);
 
+    $('#history').empty();
+    
+    for(let index of history){
+        console.log('numbers', numbers);
+        console.log(index.numbers[0].numberOne);
+        console.log(index.numbers[0].numberTwo);
+        $('#history').append(`
+        <li>${index.numbers[i].numberOne} 
+        ${index.numbers[i].operator} 
+        ${index.numbers[i].numberTwo}
+         = ${index.answer}</li>
+        `)
+    }
+    i++;
 }
 
 function clearButton(){
