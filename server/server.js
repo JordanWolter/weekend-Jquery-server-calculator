@@ -3,9 +3,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 5000;
 
-//let i = 0;
 let history = [];
-let total = [];
+let total = 0;
 let answer = {
     numbers: history,
     answer: total
@@ -51,9 +50,9 @@ app.post('/calculator', (req, res) => {
 });
 
 function add(numOne, numTwo){
-    let addSum = parseFloat(numOne) + parseFloat(numTwo);
+    let addSum = numOne + numTwo;
     console.log('in add', addSum);
-    return total.push(addSum);
+    return total = addSum;
 }
 
 function subtract(numOne, numTwo){
@@ -80,18 +79,19 @@ function decideOpp(equation){
     console.log('first num', equation.numbers[i].numberOne);
     console.log('second num', equation.numbers[i].numberTwo);
 
-    //let answerNumOne = parseFloat(numbers.numbers[i].)
+    let numOne = parseFloat(equation.numbers[i].numberOne);
+    let numTwo = parseFloat(equation.numbers[i].numberTwo);
 
     let opp = equation.numbers[i].operator;
 
     if(opp === '+'){
-        add(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        add(numOne, numTwo);
     }else if(opp === '-'){
-        subtract(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        subtract(numOne, numTwo);
     }else if(opp === '*'){
-        multiply(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        multiply(numOne, numTwo);
     }else if(opp === '/'){
-        divide(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        divide(numOne, numTwo);
     }
     i++;
     console.log('i', i);
