@@ -1,15 +1,11 @@
 
-
 //const { response } = require("express");
 
 $(document).ready(onReady);
 
-
 let numbers = [];
 let operator = '';
 let history = [];
-
-
 
 function onReady(){
     console.log('jquery is loaded!');
@@ -51,31 +47,13 @@ function divideButton(){
     return operator;
 };
 
-//function that tests 
-// function pickOperator(){
-//     if(operator === '+'){
-//         console.log('operator +', operator);
-//         return '+';
-//     }else if(operator === '-'){
-//         console.log('operator -', operator);
-//         return '-';
-//     }else if(operator === '*'){
-//         console.log('operator *', operator);
-//         return '*';
-//     }else if(operator === '/'){
-//         console.log('operator /', operator);
-//         return '/';
-//     }
-// }
-
+//function to send numbers and operator for eval
 function equalsButton(evt){
     evt.preventDefault();
 
     console.log('in equalsButton');
 
-    //let opp = pickOperator();
-    //let opp = operator;
-
+    //new object to be sent to server
     let newNumbers = {
         numberOne: $('#firstNum').val(),
         numberTwo: $('#secondNum').val(),
@@ -92,6 +70,7 @@ function equalsButton(evt){
     .then(response => {
         console.log('POST/calculator response', response);
 
+        //calls function on respose from server
         loadCalc();
 
     })
@@ -102,6 +81,7 @@ function equalsButton(evt){
 
 };
 
+//function to update arrays and render to dom
 function loadCalc(){
     console.log('in loadCalc');
 
@@ -118,13 +98,16 @@ function loadCalc(){
     })
 }
 
+
+//render function
 function render(){
     console.log('in render', numbers);
 
+    //get rid of old answer and append new one
     $('#result').empty();
     $('#result').append(`Answer: ${numbers.answer}`);
 
-
+    //clears history, then appends new histoy to dom with new equation
     $('#history').empty();
     let i = 0;
     for(let index of history){
@@ -142,11 +125,13 @@ function render(){
     console.log('i',i);
 }
 
+//function to empty input fields
 function clearButton(){
     $('#firstNum').val('');
     $('#secondNum').val('');
 };
 
+//trying to get reload to append history from server
 function onReload(){
 
     $.ajax({
@@ -157,7 +142,6 @@ function onReload(){
         console.log('GET/calculator', response);
         numbers = response;
         history.push(numbers);
-
 
         render();
     })

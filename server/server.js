@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = 5000;
 
+//global variables
+let i = 0;
 let history = [];
 let total = 0;
 let answer = {
@@ -22,8 +24,10 @@ app.get('/calculator', (req, res) => {
 
     console.log('answer object', answer);
 
+//passes in object from client and runs equation will correct operator
     decideOpp(answer);
 
+//updates the object answer
     answer.answer = total;
 
     console.log('answer', answer.answer);
@@ -49,42 +53,48 @@ app.post('/calculator', (req, res) => {
 
 });
 
-
+//function to add numbers
 function add(numOne, numTwo){
     let addSum = numOne + numTwo;
     console.log('in add', addSum);
     return total = addSum;
-}
+};
 
+//function to subtract numbers
 function subtract(numOne, numTwo){
     let subSum = parseFloat(numOne) - parseFloat(numTwo);
     console.log('in subtract', subSum);
     return total = subSum;
-}
+};
 
+//function to multiply numbers
 function multiply(numOne, numTwo){
     let multSum = parseFloat(numOne) * parseFloat(numTwo);
     console.log('in multiply', multSum);
     return total = multSum;
-}
+};
 
+//function to divide numbers
 function divide(numOne, numTwo){
     let divSum = parseFloat(numOne) / parseFloat(numTwo);
     console.log('in divide', divSum);
     return total = divSum;
-}
-let i = 0;
+};
+
+//takes in the input numbers and operator from the client
 function decideOpp(equation){
     
     console.log('in decideOpp', equation.numbers[i].operator);
     console.log('first num', equation.numbers[i].numberOne);
     console.log('second num', equation.numbers[i].numberTwo);
 
+    //converts strings to float
     let numOne = parseFloat(equation.numbers[i].numberOne);
     let numTwo = parseFloat(equation.numbers[i].numberTwo);
 
     let opp = equation.numbers[i].operator;
-
+    
+//conditional to run appropriate equation
     if(opp === '+'){
         add(numOne, numTwo);
     }else if(opp === '-'){
