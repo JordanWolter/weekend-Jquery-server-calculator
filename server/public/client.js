@@ -92,9 +92,6 @@ function equalsButton(evt){
         console.log('POST/calculator error', err);
     });
 
-    // $('#firstNum').val('');
-    // $('#secondNum').val('');
-
 };
 
 function loadCalc(){
@@ -112,7 +109,7 @@ function loadCalc(){
         render();
     })
 }
-let i = 0;
+
 function render(){
     console.log('in render', numbers);
 
@@ -120,21 +117,23 @@ function render(){
     $('#result').append(`Answer: ${numbers.answer}`);
 
     $('#history').empty();
-    
+    let i = 0;
     for(let index of history){
         console.log('numbers', numbers);
-        console.log(index.numbers[0].numberOne);
-        console.log(index.numbers[0].numberTwo);
+        console.log(index.numbers[i].numberOne);
+        console.log(index.numbers[i].numberTwo);
         $('#history').append(`
         <li>${index.numbers[i].numberOne} 
         ${index.numbers[i].operator} 
         ${index.numbers[i].numberTwo}
          = ${index.answer}</li>
         `)
+        i++;
     }
-    i++;
+    console.log('i',i);
 }
 
 function clearButton(){
-
+    $('#firstNum').val('');
+    $('#secondNum').val('');
 };

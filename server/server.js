@@ -5,7 +5,7 @@ const PORT = 5000;
 
 //let i = 0;
 let history = [];
-let total = 0;
+let total = [];
 let answer = {
     numbers: history,
     answer: total
@@ -21,9 +21,11 @@ app.listen(PORT, () => {
 
 app.get('/calculator', (req, res) => {
 
-    console.log('answer', answer);
+    console.log('answer object', answer);
 
-    answer.answer = decideOpp(answer);
+    decideOpp(answer);
+
+    answer.answer = total;
 
     console.log('answer', answer.answer);
 
@@ -51,25 +53,25 @@ app.post('/calculator', (req, res) => {
 function add(numOne, numTwo){
     let addSum = parseFloat(numOne) + parseFloat(numTwo);
     console.log('in add', addSum);
-    return addSum;
+    return total.push(addSum);
 }
 
 function subtract(numOne, numTwo){
     let subSum = parseFloat(numOne) - parseFloat(numTwo);
     console.log('in subtract', subSum);
-    return subSum;
+    return total = subSum;
 }
 
 function multiply(numOne, numTwo){
     let multSum = parseFloat(numOne) * parseFloat(numTwo);
     console.log('in multiply', multSum);
-    return multSum;
+    return total = multSum;
 }
 
 function divide(numOne, numTwo){
     let divSum = parseFloat(numOne) / parseFloat(numTwo);
     console.log('in divide', divSum);
-    return divSum;
+    return total = divSum;
 }
 let i = 0;
 function decideOpp(equation){
@@ -83,14 +85,15 @@ function decideOpp(equation){
     let opp = equation.numbers[i].operator;
 
     if(opp === '+'){
-        return total = add(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        add(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
     }else if(opp === '-'){
-        return subtract(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        subtract(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
     }else if(opp === '*'){
-        return multiply(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        multiply(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
     }else if(opp === '/'){
-        return divide(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
+        divide(equation.numbers[i].numberOne, equation.numbers[i].numberTwo);
     }
     i++;
+    console.log('i', i);
 }
 
