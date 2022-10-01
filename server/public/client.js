@@ -10,6 +10,7 @@ let operator = '';
 let history = [];
 
 
+
 function onReady(){
     console.log('jquery is loaded!');
 
@@ -19,59 +20,66 @@ function onReady(){
     $('#divide').on('click', divideButton);
     $('#calculator').on('submit', equalsButton);
     $('#clear').on('click', clearButton);
+
 };
 
+//function to make operator +
 function addButton(){
     operator = '+';
     console.log('in addButton', operator);
     return operator;
 };
 
+//function to make operator -
 function minusButton(){
     operator = '-';
     console.log('in minusButton', operator);
     return operator;
 };
 
+//function to make operator *
 function multiplyButton(){
     operator = '*';
     console.log('in multiplyButton', operator);
     return operator;
 };
 
+//function to make operator /
 function divideButton(){
     operator = '/';
     console.log('in divideButton', operator);
     return operator;
 };
 
-function pickOperator(){
-    if(operator === '+'){
-        console.log('operator +', operator);
-        return '+';
-    }else if(operator === '-'){
-        console.log('operator -', operator);
-        return '-';
-    }else if(operator === '*'){
-        console.log('operator *', operator);
-        return '*';
-    }else if(operator === '/'){
-        console.log('operator /', operator);
-        return '/';
-    }
-}
+//function that tests 
+// function pickOperator(){
+//     if(operator === '+'){
+//         console.log('operator +', operator);
+//         return '+';
+//     }else if(operator === '-'){
+//         console.log('operator -', operator);
+//         return '-';
+//     }else if(operator === '*'){
+//         console.log('operator *', operator);
+//         return '*';
+//     }else if(operator === '/'){
+//         console.log('operator /', operator);
+//         return '/';
+//     }
+// }
 
 function equalsButton(evt){
     evt.preventDefault();
 
     console.log('in equalsButton');
 
-    let opp = pickOperator();
+    //let opp = pickOperator();
+    //let opp = operator;
 
     let newNumbers = {
         numberOne: $('#firstNum').val(),
         numberTwo: $('#secondNum').val(),
-        operator: opp
+        operator: operator
     }
 
     console.log('calc input', newNumbers);
@@ -116,6 +124,7 @@ function render(){
     $('#result').empty();
     $('#result').append(`Answer: ${numbers.answer}`);
 
+
     $('#history').empty();
     let i = 0;
     for(let index of history){
@@ -137,3 +146,20 @@ function clearButton(){
     $('#firstNum').val('');
     $('#secondNum').val('');
 };
+
+function onReload(){
+
+    $.ajax({
+        url: '/calculator',
+        method: 'FETCH'
+    })
+    .then((response) => {
+        console.log('GET/calculator', response);
+        numbers = response;
+        history.push(numbers);
+
+
+        render();
+    })
+
+}
