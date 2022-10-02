@@ -23,6 +23,8 @@ function onReady(){
 function addButton(){
     operator = '+';
     console.log('in addButton', operator);
+    $('#plus').css('background-color', 'black');
+    $('#plus').css('color', 'lightgrey');
     return operator;
 };
 
@@ -30,6 +32,8 @@ function addButton(){
 function minusButton(){
     operator = '-';
     console.log('in minusButton', operator);
+    $('#minus').css('background-color', 'black');
+    $('#minus').css('color', 'lightgrey');
     return operator;
 };
 
@@ -37,6 +41,8 @@ function minusButton(){
 function multiplyButton(){
     operator = '*';
     console.log('in multiplyButton', operator);
+    $('#multiply').css('background-color', 'black');
+    $('#multiply').css('color', 'lightgrey');
     return operator;
 };
 
@@ -44,6 +50,8 @@ function multiplyButton(){
 function divideButton(){
     operator = '/';
     console.log('in divideButton', operator);
+    $('#divide').css('background-color', 'black');
+    $('#divide').css('color', 'lightgrey');
     return operator;
 };
 
@@ -115,7 +123,7 @@ function render(){
         console.log(index.numbers[i].numberOne);
         console.log(index.numbers[i].numberTwo);
         $('#history').append(`
-        <li>${index.numbers[i].numberOne} 
+        <li id="old">${index.numbers[i].numberOne} 
         ${index.numbers[i].operator} 
         ${index.numbers[i].numberTwo}
          = ${index.answer}</li>
@@ -129,6 +137,15 @@ function render(){
 function clearButton(){
     $('#firstNum').val('');
     $('#secondNum').val('');
+    $('#plus').css('background-color', 'lightgrey');
+    $('#plus').css('color', 'black');
+    $('#minus').css('background-color', 'lightgrey');
+    $('#minus').css('color', 'black');
+    $('#multiply').css('background-color', 'lightgrey');
+    $('#multiply').css('color', 'black');
+    $('#divide').css('background-color', 'lightgrey');
+    $('#divide').css('color', 'black');
+    $('#result').empty();
 };
 
 //trying to get reload to append history from server
