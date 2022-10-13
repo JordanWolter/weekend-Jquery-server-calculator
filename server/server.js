@@ -4,9 +4,8 @@ const app = express();
 const PORT = 5000;
 
 //global variables
-let i = 0;
 let history = [];
-let total = 0;
+let total = [];
 let answer = {
     numbers: history,
     answer: total
@@ -17,7 +16,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static('server/public'));
 
 app.listen(PORT, () => {
-    console.log('Server is running on port', PORT)
+
+    console.log('Server is running on port', PORT);
+
 });
 
 app.get('/calculator', (req, res) => {
@@ -27,12 +28,9 @@ app.get('/calculator', (req, res) => {
 //passes in object from client and runs equation will correct operator
     decideOpp(answer);
 
+    removeAnswer(answer);
+
 //updates the object answer
-    answer.answer = total;
-
-    console.log('answer', answer.answer);
-
-    console.log('total', total);
 
     res.send(answer);
 
@@ -43,11 +41,7 @@ app.post('/calculator', (req, res) => {
 
     let newNumFrom = req.body;
 
-    console.log('newNumFrom', newNumFrom);
-
     history.push(newNumFrom);
-
-    console.log('history.push', history);
 
     res.sendStatus(201);
 
@@ -55,45 +49,56 @@ app.post('/calculator', (req, res) => {
 
 //function to add numbers
 function add(numOne, numTwo){
+
     let addSum = numOne + numTwo;
     console.log('in add', addSum);
-    return total = addSum;
+    total.push(addSum);
+    
 };
 
 //function to subtract numbers
 function subtract(numOne, numTwo){
-    let subSum = parseFloat(numOne) - parseFloat(numTwo);
+
+    let subSum = numOne - numTwo;
     console.log('in subtract', subSum);
-    return total = subSum;
+    total.push(subSum);
+
 };
 
 //function to multiply numbers
 function multiply(numOne, numTwo){
-    let multSum = parseFloat(numOne) * parseFloat(numTwo);
+
+    let multSum = numOne * numTwo;
     console.log('in multiply', multSum);
-    return total = multSum;
+    total.push(multSum);
+
 };
 
 //function to divide numbers
 function divide(numOne, numTwo){
-    let divSum = parseFloat(numOne) / parseFloat(numTwo);
+
+    let divSum = numOne / numTwo;
     console.log('in divide', divSum);
-    return total = divSum;
+    total.push(divSum);
+
 };
 
 //takes in the input numbers and operator from the client
 function decideOpp(equation){
-    
-    console.log('in decideOpp', equation.numbers[i].operator);
-    console.log('first num', equation.numbers[i].numberOne);
-    console.log('second num', equation.numbers[i].numberTwo);
 
-    //converts strings to float
-    let numOne = parseFloat(equation.numbers[i].numberOne);
-    let numTwo = parseFloat(equation.numbers[i].numberTwo);
+    let numOne = 0;
+    let numTwo = 0;
+    let opp = '';
 
-    let opp = equation.numbers[i].operator;
-    
+    for(let index of equation.numbers){
+        console.log('equation.numbers', index);
+
+        numOne = parseFloat(index.numberOne);
+        numTwo = parseFloat(index.numberTwo);
+        opp = index.operator;
+        
+    };
+
 //conditional to run appropriate equation
     if(opp === '+'){
         add(numOne, numTwo);
@@ -103,8 +108,16 @@ function decideOpp(equation){
         multiply(numOne, numTwo);
     }else if(opp === '/'){
         divide(numOne, numTwo);
-    }
-    i++;
-    console.log('i', i);
-}
+    };
+};
+
+//removes answer (functions run and add answer from previous input on page reload)
+function removeAnswer(answers){
+    console.log('in removeAnswer', answers);
+
+    if(answers.numbers.length !== answers.answer.length){
+        answers.answer.pop();
+
+    };
+};
 

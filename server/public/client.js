@@ -5,7 +5,6 @@ $(document).ready(onReady);
 
 let numbers = [];
 let operator = '';
-let history = [];
 
 function onReady(){
     console.log('jquery is loaded!');
@@ -17,42 +16,50 @@ function onReady(){
     $('#calculator').on('submit', equalsButton);
     $('#clear').on('click', clearButton);
 
+    loadCalc();
+    //render(history);
+    noInput();
+
 };
 
 //function to make operator +
 function addButton(){
+
     operator = '+';
     console.log('in addButton', operator);
     $('#plus').css('background-color', 'black');
     $('#plus').css('color', 'lightgrey');
-    return operator;
+
 };
 
 //function to make operator -
 function minusButton(){
+
     operator = '-';
     console.log('in minusButton', operator);
     $('#minus').css('background-color', 'black');
     $('#minus').css('color', 'lightgrey');
-    return operator;
+
 };
 
 //function to make operator *
 function multiplyButton(){
+
     operator = '*';
     console.log('in multiplyButton', operator);
     $('#multiply').css('background-color', 'black');
     $('#multiply').css('color', 'lightgrey');
-    return operator;
+
 };
 
 //function to make operator /
 function divideButton(){
+
     operator = '/';
     console.log('in divideButton', operator);
     $('#divide').css('background-color', 'black');
     $('#divide').css('color', 'lightgrey');
-    return operator;
+
 };
 
 //function to send numbers and operator for eval
@@ -63,17 +70,20 @@ function equalsButton(evt){
 
     //new object to be sent to server
     let newNumbers = {
+        
         numberOne: $('#firstNum').val(),
         numberTwo: $('#secondNum').val(),
-        operator: operator
+        operator: operator,
     }
 
     console.log('calc input', newNumbers);
 
     $.ajax({
+
         url: '/calculator',
         method: 'POST',
         data: newNumbers
+
     })
     .then(response => {
         console.log('POST/calculator response', response);
@@ -83,10 +93,9 @@ function equalsButton(evt){
 
     })
     .catch((err) => {
-
         console.log('POST/calculator error', err);
-    });
 
+    });
 };
 
 //function to update arrays and render to dom
@@ -94,43 +103,76 @@ function loadCalc(){
     console.log('in loadCalc');
 
     $.ajax({
+
         url: '/calculator',
         method: 'GET'
+
     })
     .then((response) => {
         console.log('GET/calculator', response);
-        numbers = response;
-        history.push(numbers);
+        
+        // //history.push(response);
+        // console.log('history', history)
 
-        render();
-    })
+        render(response);
+
+        noInput();
+
+    });
+};
+
+function renderAnswer(history){
+
+    let answer = [];
+
+    for(let index of history.answer){
+        console.log('getting answers', index);
+
+        $('#result').empty();
+        $('#result').append(`Answer: ${index}`);
+
+        answer.push(index);
+    }
+    return answer;
 }
 
+function noInput(){
+
+    let noNum = false;
+    if($('#firstNum').val().length === 0 || $('#secondNum').val().length === 0){
+        $('#result').empty();
+
+    }
+
+    return noNum
+
+}
 
 //render function
-function render(){
-    console.log('in render', numbers);
+function render(history){
 
-    //get rid of old answer and append new one
-    $('#result').empty();
-    $('#result').append(`Answer: ${numbers.answer}`);
-
-    //clears history, then appends new histoy to dom with new equation
-    $('#history').empty();
+    let answer = 0;
     let i = 0;
-    for(let index of history){
-        console.log('numbers', numbers);
-        console.log(index.numbers[i].numberOne);
-        console.log(index.numbers[i].numberTwo);
+    
+    // if($('#numOne').val().length !== 0){
+        
+    // }
+    answer = renderAnswer(history);
+   
+
+    $('#history').empty();
+    for(let index of history.numbers){
+        console.log('getting numbers', index);
+
         $('#history').append(`
-        <li id="old">${index.numbers[i].numberOne} 
-        ${index.numbers[i].operator} 
-        ${index.numbers[i].numberTwo}
-         = ${index.answer}</li>
-        `)
-        i++;
-    }
-    console.log('i',i);
+         <li id="old">${index.numberOne} 
+         ${index.operator} 
+         ${index.numberTwo}
+          = ${answer[i]}</li>
+         `);
+
+         i++;
+    } 
 }
 
 //function to empty input fields
@@ -147,20 +189,3 @@ function clearButton(){
     $('#divide').css('color', 'black');
     $('#result').empty();
 };
-
-//trying to get reload to append history from server
-function onReload(){
-
-    $.ajax({
-        url: '/calculator',
-        method: 'FETCH'
-    })
-    .then((response) => {
-        console.log('GET/calculator', response);
-        numbers = response;
-        history.push(numbers);
-
-        render();
-    })
-
-}
